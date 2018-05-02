@@ -1,0 +1,2 @@
+# scouter-paper-screenshot
+screenshot
