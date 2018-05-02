@@ -60,3 +60,4 @@ typings/
 *.iml
 /bin
 /out
+/.idea
