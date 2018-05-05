@@ -1,5 +1,6 @@
 const https = require('https');
 const config = require('config');
+const log = require('./log');
 
 const line = {};
 
@@ -8,7 +9,7 @@ const line = {};
  * @param msg
  */
 line.send = function (messages) {
-    console.log(`[send to line] msg -> ${messages}`);
+    log.info(`[send to line] : ${JSON.stringify(messages)}`);
     const postData = JSON.stringify({
         to: config.get('line.to'),
         messages: messages
@@ -27,16 +28,16 @@ line.send = function (messages) {
     };
 
     const postReq = https.request(options, function (postRes) {
-        console.log('STATUS:' + postRes.statusCode);
-        console.log('HEADERS:' + JSON.stringify(postRes.headers));
+        log.info(`[line response] status : ${JSON.stringify(postRes.statusCode)}`);
+        log.info(`[line response] HEADERS : ${JSON.stringify(postRes.headers)}`);
 
         postRes.on('data', function (chunk) {
-            console.log('[RES]:' + chunk);
+            log.info(`[line response] body : ${JSON.stringify(chunk)}`);
         })
     });
 
     postReq.on('error', function (e) {
-        console.log('problem with request:' + e.message);
+        log.error(`[line call error] body : ${JSON.stringify(e)}`, e);
     });
 
     postReq.write(postData);
