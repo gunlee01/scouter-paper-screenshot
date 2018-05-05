@@ -23,7 +23,7 @@ shooter.makeScreenShot = async function(url, outDir, fileName) {
         log.error(`[upload oss error] body : ${JSON.stringfy(e)}`, e);
     }
 
-    log.info(`[screenshot worked] : ${fileName}, elapsed: ${moment.duration(start.diff(moment())).asSeconds()}`);
+    log.info(`[screenshot worked] : ${fileName}, elapsed: ${moment.duration(moment().diff(start)).asSeconds()}`);
 };
 
 
