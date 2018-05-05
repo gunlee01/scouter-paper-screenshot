@@ -1,0 +1,15 @@
+{
+  "line" : {
+    "token": "Bearer {}",
+    "to": "",
+    "hostname": "api.line.me",
+    "push-path": "/v2/bot/message/push/"
+  },
+  "oss" : {
+    "region": "",
+    "accessKeyId": "",
+    "accessKeySecret": "",
+    "bucketName": "",
+    "dir": ""
+  }
+}

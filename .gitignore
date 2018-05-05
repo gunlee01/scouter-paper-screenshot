@@ -58,6 +58,7 @@ typings/
 .env
 
 *.iml
-/bin
 /out
 /.idea
+
+/config/local.json
