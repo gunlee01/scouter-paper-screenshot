@@ -9,10 +9,10 @@ router.get('/', function(req, res, next) {
 
 router.get('/screenshot', function(req, res, next) {
     const alert = {
-        url: 'http://localhost:3000/#/paper?realtime=false&longterm=false&xlogElapsedTime=10000',
-        instances: '1305369747,-725152471',
-        layout: 'link-default',
-        message: 'Test3 is high!'
+        url: req.query.url,
+        instances: req.query.instances,
+        layout: req.query.layout,
+        message: req.query.message
     };
     queueing(alert);
 

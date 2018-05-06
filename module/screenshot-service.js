@@ -12,7 +12,7 @@ const snoozingDuration = 5 * 60 * 1000;
 const afterServiceDuration = 10 * 60 * 1000;
 const afterServiceCheckInterval = 10 * 1000;
 
-const maxDuration = 15 * 60 * 1000;
+const maxDuration = 20 * 60 * 1000;
 
 const alertSentBox = {};
 const afterServiceBox = {};
@@ -120,7 +120,8 @@ async function makeResizedImage(dir, fileName, size, resultFileName) {
 async function sendAlert(alert, modeMessage, from , to) {
     log.info('[prepare to send] : ' + JSON.stringify(alert));
 
-    const url = `${alert.url}&instances=${alert.instances}&layout=${alert.layout}&from=${from.format('x')}&to=${to.format('x')}`;
+    let url = `${alert.url}&instances=${alert.instances}&from=${from.format('x')}&to=${to.format('x')}`;
+    url = alert.layout ? `${url}&layout=${alert.layout}` : url;
     const fileName = `sc_${Math.abs(Crc32.str(alert.instances))}_${Math.abs(Crc32.str(alert.layout))}_${from.format('YYYYMMDDHHmmss')}_${to.format('YYYYMMDDHHmmss')}.jpg`;
     const regularFileName = `r1_${fileName}`;
     const thumbnailFileName = `r2_${fileName}`;
