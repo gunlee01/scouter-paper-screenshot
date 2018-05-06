@@ -6,7 +6,7 @@ const shooter = {};
 
 shooter.makeScreenShot = async function(url, outDir, fileName) {
     log.info(`[screenshot cooking start] : ${fileName}`);
-    
+
     const start = moment();
     const browser = await puppeteer.launch({args: ['--no-sandbox']});
     const page = await browser.newPage();

@@ -97,7 +97,7 @@ async function afterService() {
             log.info('[alert after service] : ' + JSON.stringify(alert));
             delete afterServiceBox[alertKey];
 
-            const modeMessage = `auto shot after ${Math.trunc(afterServiceDuration/60/1000)}min of alert`;
+            const modeMessage = `Reminding Screenshot ${Math.trunc(afterServiceDuration/60/1000)}min after previous alert.`;
             const from = alert.queueingTime.clone().subtract(5, 'minutes');
             const to = moment.min(moment(), alert.queueingTime.clone().add(maxDuration, 'ms'));
 
@@ -139,7 +139,7 @@ async function sendAlert(alert, modeMessage, from , to) {
     const messages = [
         {
             type: 'text',
-            text: `[screenshot] ${modeMessage}\n` +
+            text: `[SCREENSHOT] ${modeMessage}\n` +
                 `[Duration] ${from.format('(MM/DD) HH:mm')} ~ ${to.format('(MM/DD) HH:mm')}\n` +
                 `[Original Message] ${alert.message}`
         },
