@@ -110,6 +110,7 @@ async function afterService() {
 
 async function makeResizedImage(dir, fileName, size, resultFileName) {
     await sharp(`${dir}/${fileName}`)
+        .withoutEnlargement(false)
         .resize(size, size)
         .max()
         .toFile(`${dir}/${resultFileName}`);

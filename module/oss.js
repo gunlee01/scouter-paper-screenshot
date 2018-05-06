@@ -16,7 +16,7 @@ oss.uploadToOss = async function(fileName, fileDir) {
         ossClient.useBucket(config.get('oss.bucketName'));
         yield ossClient.put(`${config.get('oss.dir')}/${fileName}`, `${fileDir}/${fileName}`);
     }).catch(function (err) {
-        log.error(`[upload oss error] body : ${JSON.stringfy(err)}`, err);
+        log.error(`[upload oss error] body : ${JSON.stringify(err)}`, err);
     });
 };
 
