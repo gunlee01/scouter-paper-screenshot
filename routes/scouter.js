@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
 router.get('/screenshot', function(req, res, next) {
     const alert = {
         url: req.query.url,
+        name: req.query.name,
         instances: req.query.instances,
         layout: req.query.layout,
         message: req.query.message

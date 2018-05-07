@@ -58,7 +58,7 @@ module.exports = function queuing(alert) {
  */
 async function doIt(alerts) {
     for (alert of alerts) {
-        const key = alert.instances.replace(',', '_').replace('%','_') + "_" + alert.layout;
+        const key = alert.instances.replace(',', '_').replace('%','_') + "_" + alert.layout + "_" + alert.name;
         alertBox[key] = alert;
     }
 
