@@ -1,9 +1,23 @@
 {
+  "delayingDuration": 30000,
+  "snoozingDuration": 300000,
+  "afterServiceDuration": 600000,
+  "slack": {
+    "hostname": "hooks.slack.com",
+    "webhook-path": ""
+  },
   "line" : {
     "token": "Bearer {}",
     "to": "",
     "hostname": "api.line.me",
     "push-path": "/v2/bot/message/push/"
+  },
+  "s3" : {
+    "region": "ap-northeast-2",
+    "accessKeyId": "",
+    "secretAccessKey": "",
+    "bucketName": "",
+    "dir": ""
   },
   "oss" : {
     "region": "",

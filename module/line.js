@@ -32,7 +32,7 @@ line.send = function (messages) {
         log.info(`[line response] HEADERS : ${JSON.stringify(postRes.headers)}`);
 
         postRes.on('data', function (chunk) {
-            log.info(`[line response] body : ${JSON.stringify(chunk)}`);
+            log.info(`[line response] body : ${chunk}`);
         })
     });
 

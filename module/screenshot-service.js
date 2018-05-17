@@ -2,16 +2,19 @@ const Queue = require('better-queue');
 const moment = require('moment');
 const Crc32 = require('crc-32');
 const line = require('./line');
+const slack = require('./slack');
 const oss = require('./oss');
+const s3 = require('./s3');
 const shooter = require('./shooter');
 const log = require('./log');
 const sharp = require('sharp');
+const config = require('config');
 
-const delayingDuration = 30 * 1000;
-const snoozingDuration = 5 * 60 * 1000;
-const afterServiceDuration = 10 * 60 * 1000;
+const delayingDuration = config.get("delayingDuration");
+const snoozingDuration = config.get("snoozingDuration");
+const afterServiceDuration = config.get("afterServiceDuration");
+
 const afterServiceCheckInterval = 10 * 1000;
-
 const maxDuration = 20 * 60 * 1000;
 
 const alertSentBox = {};
@@ -133,23 +136,64 @@ async function sendAlert(alert, modeMessage, from , to) {
     await makeResizedImage(outDir, fileName, 1024, regularFileName);
     await makeResizedImage(outDir, fileName, 240, thumbnailFileName);
 
-    await oss.uploadToOss(regularFileName, outDir);
-    await oss.uploadToOss(thumbnailFileName, outDir);
+    let imageUrl;
+    let thumbnailUrl;
 
-    const messages = [
-        {
-            type: 'text',
-            text: `[SCREENSHOT] ${modeMessage}\n` +
+    if(config.get("s3.accessKeyId")) {
+        await s3.uploadToS3(regularFileName, outDir);
+        await s3.uploadToS3(regularFileName, outDir);
+        imageUrl = s3.getS3ImageUrl(regularFileName);
+        thumbnailUrl = s3.getS3ImageUrl(thumbnailFileName);
+    } else {
+        await oss.uploadToOss(regularFileName, outDir);
+        await oss.uploadToOss(thumbnailFileName, outDir);
+        imageUrl = oss.getOssImageUrl(regularFileName);
+        thumbnailUrl = oss.getOssImageUrl(thumbnailFileName);
+    }
+
+    if(config.get("slack.webhook-path")) {
+        const data = {
+            attachments: [
+                {
+                    color: "#E74C3C",
+                    title: `[SCREENSHOT] ${modeMessage}`,
+                    title_link: imageUrl,
+                    fallback: "image can not display.",
+                    fields: [
+                        {
+                            title: "Duration",
+                            value: `${from.format('(MM/DD) HH:mm')} ~ ${to.format('HH:mm')}`,
+                            short: false
+                        },
+                        {
+                            title: "Original message",
+                            value: alert.message,
+                            short: false
+                        }
+                    ],
+                    image_url: imageUrl
+                }
+            ]
+        };
+        slack.send(data);
+    }
+
+    if(config.get("line.to")) {
+        const messages = [
+            {
+                type: 'text',
+                text: `[SCREENSHOT] ${modeMessage}\n` +
                 `[Duration] ${from.format('(MM/DD) HH:mm')} ~ ${to.format('(MM/DD) HH:mm')}\n` +
                 `[Original Message] ${alert.message}`
-        },
-        {
-            type: 'image',
-            originalContentUrl: `${oss.getOssImageUrl(regularFileName)}`,
-            previewImageUrl: `${oss.getOssImageUrl(thumbnailFileName)}`
-        }
-    ];
-    line.send(messages);
+            },
+            {
+                type: 'image',
+                originalContentUrl: imageUrl,
+                previewImageUrl: thumbnailUrl
+            }
+        ];
+        line.send(messages);
+    }
 }
 
 function clearAlertBox() {
