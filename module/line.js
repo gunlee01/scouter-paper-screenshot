@@ -8,12 +8,13 @@ const line = {};
  * send message to line
  * @param msg
  */
-line.send = function (messages) {
-    log.info(`[send to line] : ${JSON.stringify(messages)}`);
-    const postData = JSON.stringify({
-        to: config.get('line.to'),
-        messages: messages
-    });
+line.send = function (formData) {
+    log.info(`[send to line] : ${JSON.stringify(formData)}`);
+
+    // const postData = JSON.stringify({
+    //     to: config.get('line.to'),
+    //     messages: messages
+    // });
 
     const options = {
         hostname: config.get('line.hostname'),
@@ -21,9 +22,13 @@ line.send = function (messages) {
         path: config.get('line.push-path'),
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': config.get('line.token'),
-            'Content-Length': Buffer.byteLength(postData)
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + config.get('line.token')
+        },
+        formData : {
+            'message' : formData.message,
+            'imageThumbnail': formData.imageThumbnail,
+            'imageFullsize': formData.imageFullsize
         }
     };
 

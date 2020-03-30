@@ -179,20 +179,29 @@ async function sendAlert(alert, modeMessage, from , to) {
     }
 
     if(config.get("line.to")) {
-        const messages = [
-            {
-                type: 'text',
-                text: `[SCREENSHOT] ${modeMessage}\n` +
+        // const messages = [
+        //     {
+        //         type: 'text',
+        //         text: `[SCREENSHOT] ${modeMessage}\n` +
+        //         `[Duration] ${from.format('(MM/DD) HH:mm')} ~ ${to.format('(MM/DD) HH:mm')}\n` +
+        //         `[Original Message] ${alert.message}`
+        //     },
+        //     {
+        //         type: 'image',
+        //         originalContentUrl: imageUrl,
+        //         previewImageUrl: thumbnailUrl
+        //     }
+        // ];
+
+        const formData = {
+            message: `[SCREENSHOT] ${modeMessage}\n` +
                 `[Duration] ${from.format('(MM/DD) HH:mm')} ~ ${to.format('(MM/DD) HH:mm')}\n` +
-                `[Original Message] ${alert.message}`
-            },
-            {
-                type: 'image',
-                originalContentUrl: imageUrl,
-                previewImageUrl: thumbnailUrl
-            }
-        ];
-        line.send(messages);
+                `[Original Message] ${alert.message}`,
+            imageThumbnail: thumbnailUrl,
+            imageFullsize: imageUrl
+        };
+
+        line.send(formData);
     }
 }
 
