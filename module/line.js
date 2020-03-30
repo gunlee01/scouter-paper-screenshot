@@ -19,23 +19,31 @@ line.send = function (formData) {
 
     const apiUrl = config.get('line.hostname') + config.get('line.push-path');
 
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + config.get('line.token')
+    };
+
+    const form = {
+        'message': formData.message,
+        'imageThumbnail': formData.imageThumbnail,
+        'imageFullsize': formData.imageFullsize
+    };
+
+    log.info(`[line request] url : ${apiUrl}`);
+    log.info(`[line request] header : ${headers}`);
+    log.info(`[line request] form : ${form}`);
+
     request.post({
         url: apiUrl,
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ' + config.get('line.token')
-        },
-        form: {
-            'message': formData.message,
-            'imageThumbnail': formData.imageThumbnail,
-            'imageFullsize': formData.imageFullsize
-        }
+        headers: headers,
+        form: form
     }, function (err, httpResponse, body) {
         if (err) {
+            log.error(`[line call error] body : ${JSON.stringify(err)}`, err);
+        } else {
             log.info(`[line response] httpResponse : ${JSON.stringify(httpResponse)}`);
             log.info(`[line response] body : ${body}`);
-        } else {
-            log.error(`[line call error] body : ${JSON.stringify(err)}`, err);
         }
     });
 
