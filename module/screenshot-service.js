@@ -178,7 +178,7 @@ async function sendAlert(alert, modeMessage, from , to) {
         slack.send(data);
     }
 
-    if(config.get("line.to")) {
+    if(config.get("line.token")) {
         // const messages = [
         //     {
         //         type: 'text',
