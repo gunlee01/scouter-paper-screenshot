@@ -17,7 +17,7 @@ line.send = function (formData) {
     //     messages: messages
     // });
 
-    const apiUrl = config.get('line.hostname') + config.get('line.push-path');
+    const apiUrl = 'https://' + config.get('line.hostname') + config.get('line.push-path');
 
     const headers = {
         'Content-Type': 'multipart/form-data',
@@ -31,8 +31,8 @@ line.send = function (formData) {
     };
 
     log.info(`[line request] url : ${apiUrl}`);
-    log.info(`[line request] header : ${headers}`);
-    log.info(`[line request] form : ${form}`);
+    log.info(`[line request] header : ${JSON.stringify(headers)}`);
+    log.info(`[line request] form : ${JSON.stringify(form)}`);
 
     request.post({
         url: apiUrl,
