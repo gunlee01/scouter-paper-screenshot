@@ -126,6 +126,8 @@ async function sendAlert(alert, modeMessage, from , to) {
 
     let url = `${alert.url}&instances=${alert.instances}&from=${from.format('x')}&to=${to.format('x')}`;
     url = alert.layout ? `${url}&layout=${alert.layout}` : url;
+    url = alert.activesid ? `${url}&activesid=${alert.activesid}` : `${url}&activesid=0`;
+
     const fileName = `sc_${Math.abs(Crc32.str(alert.instances))}_${Math.abs(Crc32.str(alert.layout))}_${from.format('YYYYMMDDHHmmss')}_${to.format('YYYYMMDDHHmmss')}.jpg`;
     const regularFileName = `r1_${fileName}`;
     const thumbnailFileName = `r2_${fileName}`;
